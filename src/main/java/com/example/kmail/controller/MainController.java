@@ -16,16 +16,12 @@ public class MainController {
     @Autowired
     private MessageRep messageRepo;
 
-    @GetMapping("/greeting")
-    public String greeting(
-            @RequestParam(name="name", required=false, defaultValue="World") String name,
-            Map<String, Object> model
-    ) {
-        model.put("name", name);
+    @GetMapping("/")
+    public String greeting(Map<String, Object> model) {
         return "greeting";
     }
 
-    @GetMapping ("/mainForm")
+    @GetMapping("/mainForm")
     public String main(Map<String, Object> model) {
         Iterable<Message> messages = messageRepo.findAll();
 
@@ -34,10 +30,10 @@ public class MainController {
         return "mainForm";
     }
 
-    @PostMapping ("/mainForm")
+    @PostMapping("/mainForm")
     public String add(@RequestParam String text, @RequestParam String tag, Map<String, Object> model) {
         Message message = new Message(text, tag);
-//id не генерируется
+
         messageRepo.save(message);
 
         Iterable<Message> messages = messageRepo.findAll();
@@ -47,7 +43,7 @@ public class MainController {
         return "mainForm";
     }
 
-    @PostMapping("filter")
+    @PostMapping("/filter")
     public String filter(@RequestParam String filter, Map<String, Object> model) {
         Iterable<Message> messages;
 
@@ -63,25 +59,4 @@ public class MainController {
     }
 }
 
-//<!-- security -->
-//<dependency>
-//<groupId>org.springframework.boot</groupId>
-//<artifactId>spring-boot-starter-security</artifactId>
-//</dependency>
-//<dependency>
-//<groupId>org.springframework.security</groupId>
-//<artifactId>spring-security-core</artifactId>
-//</dependency>
-//<dependency>
-//<groupId>org.springframework.security</groupId>
-//<artifactId>spring-security-web</artifactId>
-//</dependency>
-//<dependency>
-//<groupId>org.springframework.security</groupId>
-//<artifactId>spring-security-config</artifactId>
-//</dependency>
-//<dependency>
-//<groupId>org.springframework.security</groupId>
-//<artifactId>spring-security-test</artifactId>
-//<scope>test</scope>
-//</dependency>
+
