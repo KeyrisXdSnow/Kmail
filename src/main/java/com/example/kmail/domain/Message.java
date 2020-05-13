@@ -13,13 +13,15 @@ public class Message {
 
     private String text ;
     private String tag;
+    private User author;
 
     public Message () {
     }
 
-    public Message (String text, String tag) {
+    public Message (String text, String tag, User author) {
         this.text = text;
         this.tag = tag ;
+        this.author = author;
     }
 
     public void setId(Long id) {
@@ -44,5 +46,13 @@ public class Message {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public User getUser() {
+        return author;
+    }
+
+    public void setUser(User author) {
+        this.author = author;
     }
 }
