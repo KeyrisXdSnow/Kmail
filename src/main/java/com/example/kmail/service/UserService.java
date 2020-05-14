@@ -1,5 +1,7 @@
 package com.example.kmail.service;
 
+import com.example.kmail.domain.MyUserPrincipal;
+import com.example.kmail.domain.User;
 import com.example.kmail.repository.UserRep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,18 +11,19 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService implements UserDetailsService {
-//
-//    private final UserRep userRep; // новый способ заменяет AutoWired
-//
-//    public UserService(UserRep userRep) {
-//        this.userRep = userRep;
-//    }
-
+    
     @Autowired
-    private UserRep userRep;
+    private UserRep userRepo;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRep.findByUsername(username);
+        User user = userRepo.findByUsername(username) ;
+
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        return user;
     }
+
 }
