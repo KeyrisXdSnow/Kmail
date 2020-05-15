@@ -1,6 +1,5 @@
 package com.example.kmail.service;
 
-import com.example.kmail.domain.MyUserPrincipal;
 import com.example.kmail.domain.User;
 import com.example.kmail.repository.UserRep;
 import org.springframework.beans.factory.annotation.Autowired;

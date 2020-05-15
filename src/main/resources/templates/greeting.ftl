@@ -1,5 +1,5 @@
 <#import "parts/common.ftl" as common>
 <@common.page>
-<div>Hello, user</div>
-<a href="/mainForm">Main page</a>
+    <h5> Hello, guest</h5>
+    <div> This is my post service </div>
 </@common.page>
