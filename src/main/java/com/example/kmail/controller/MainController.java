@@ -1,8 +1,8 @@
 package com.example.kmail.controller;
 
-import com.example.kmail.domain.Message;
+import com.example.kmail.domain.Notes;
 import com.example.kmail.domain.User;
-import com.example.kmail.repository.MessageRep;
+import com.example.kmail.repository.NoteRep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,16 +15,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 import java.util.UUID;
-
-import static java.util.UUID.randomUUID;
 
 @Controller
 public class MainController {
 
     @Autowired
-    private MessageRep messageRepo;
+    private NoteRep noteRepo;
     @Value("${upload.path}")
     private String uploadPath;
 
@@ -42,12 +39,12 @@ public class MainController {
     @GetMapping("/mainForm")
     public String main(@RequestParam(required = false,defaultValue = "") String filter, Model model) {
 
-        Iterable<Message> messages;
+        Iterable<Notes> messages;
 
         if (filter != null && !filter.isEmpty()) {
-            messages = messageRepo.findByTag(filter);
+            messages = noteRepo.findByTag(filter);
         } else {
-            messages = messageRepo.findAll();
+            messages = noteRepo.findAll();
         }
 
         model.addAttribute("messages", messages);
@@ -62,7 +59,7 @@ public class MainController {
             @RequestParam String text, @RequestParam String tag,
             @RequestParam MultipartFile file,
             Model model) throws IOException {
-        Message message = new Message(text, tag,user);
+        Notes notes = new Notes(text, tag,user);
         if (file != null) {
             File fileDir = new File(uploadPath);
             if (!fileDir.exists()) fileDir.mkdir();
@@ -72,17 +69,24 @@ public class MainController {
 
             file.transferTo(new File(uploadPath.concat("/").concat(resultPath)));
 
-            message.setFileName(resultPath);
+            notes.setFileName(resultPath);
         }
 
-        messageRepo.save(message);
+        noteRepo.save(notes);
 
-        Iterable<Message> messages = messageRepo.findAll();
+        Iterable<Notes> messages = noteRepo.findAll();
 
         model.addAttribute("messages", messages);
 
         return "mainForm";
     }
+
+    @GetMapping("/index")
+    public String compose (Model model) {
+        return "index";
+    }
+
+
 
 }
 

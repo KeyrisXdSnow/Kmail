@@ -7,7 +7,6 @@
     >
 <#else>
     <#assign
-        name = "unknown"
         isAdmin = false
     >
 </#if>

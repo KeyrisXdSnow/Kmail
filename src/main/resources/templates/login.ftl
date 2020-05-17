@@ -2,6 +2,6 @@
 <#import "parts/login.ftl" as l>
 
 <@c.page>
-    Login page
+    ${notes!}
     <@l.login "/login" false />
 </@c.page>

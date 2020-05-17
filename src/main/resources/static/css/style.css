@@ -1,0 +1,122 @@
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.blur-it {
+    -webkit-filter: blur(4px);
+    filter: blur(4px);
+}
+
+a.btn {
+
+    width: 10%;
+    padding: 18px 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #fff;
+    border-radius: 0;
+    background: #e2525c;
+}
+
+div {
+    border-top-right-radius: 10px; /* Уголки */
+    border-top-left-radius: 10px; /* Уголки */
+}
+.modal-wrapper {
+
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    opacity: 0;
+    -webkit-transition: all 0.25s ease-in-out;
+    transition: all 0.25s ease-in-out;
+
+
+}
+
+.modal-wrapper.open {
+    opacity: 1;
+    visibility: visible;
+}
+.fixed-top {
+    margin-top: 1%;
+}
+.modal {
+    width: 32%;
+    height: available;
+    display: block;
+    position: relative;
+    top: 55%;
+    left: 67%;
+    background: #fff;
+    opacity: 0;
+    -webkit-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+.content textarea {
+    margin-top: 1% ;
+    resize: none;
+    width: 100%;
+}
+
+
+.modal-wrapper.open .modal {
+    margin-top: -200px;
+    opacity: 1;
+}
+
+
+
+.head {
+    width: 100%;
+    height: available;
+    overflow: hidden;
+    background: #e2525c;
+}
+.head text {
+    align-items: center;
+    color: rgba(21, 25, 27, 0);
+    margin-left: 2%;
+}
+
+.btn-close {
+    font-size: 28px;
+    display: block;
+    float: right;
+    color: #ffffff;
+    margin-right: 1%;
+}
+
+.content textarea {
+    resize: none;
+    width: 97%;
+    margin-left: 1% ;
+    margin-right: 1%;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.13);
+}
+.footer {
+    height: auto;
+    margin-left: 0.5%;
+}
+.footer button {
+    color: black;
+    border: none;
+    margin-left: 1%;
+
+}

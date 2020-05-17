@@ -1,82 +1,81 @@
 package com.example.kmail.domain;
 
 import javax.persistence.*;
+import java.io.File;
+import java.util.ArrayList;
 
-@Entity
 public class Message {
-    /** spring будет сам генерировать значение поля id **/
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", updatable = false, nullable = false)
     private Long id ;
 
-    private String text ;
-    private String tag;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private User author;
-
-    private String fileName ;
+    private String sender;
+    private String recipient;
+    private String subject;
+    private String messageText ;
+    private ArrayList<File> attachedFiles;
 
     public Message () {
     }
 
-    public Message (String text, String tag, User author) {
-        this.text = text;
-        this.tag = tag ;
-        this.author = author;
+    public Message(String sender, String recipient, String subject, String messageText, ArrayList<File> attachedFiles) {
+        this.sender = sender;
+        this.recipient = recipient;
+        this.subject = subject;
+        this.messageText = messageText;
+        this.attachedFiles = attachedFiles;
+    }
+
+
+    public Long getId() {
+        return id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getId() {
-        return id;
+    public String getSender() {
+        return sender;
     }
 
-    public String getText() {
-        return text;
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public String getRecipient() {
+        return recipient;
     }
 
-    public String getTag() {
-        return tag;
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public String getSubject() {
+        return subject;
     }
 
-    public User getUser() {
-        return author;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
-    public void setUser(User author) {
-        this.author = author;
+    public String getMessageText() {
+        return messageText;
     }
 
-    public String getAuthorName () {
-        return author.getUsername() != null ? author.getUsername() : "<none>";
+    public void setMessageText(String messageText) {
+        this.messageText = messageText;
     }
 
-    public User getAuthor() {
-        return author;
+    public ArrayList<File> getAttachedFiles() {
+        return attachedFiles;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setAttachedFiles(ArrayList<File> attachedFiles) {
+        this.attachedFiles = attachedFiles;
     }
 }

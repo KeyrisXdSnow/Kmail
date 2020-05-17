@@ -15,12 +15,16 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String username;
     private String password;
+    private String email;
     private boolean active;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
+
+
+    private String activationCode ;
 
     public Long getId() {
         return id;
@@ -89,5 +93,21 @@ public class User implements UserDetails {
 
     public boolean isAdmin () {
         return roles.contains(Role.ADMIN);
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
     }
 }

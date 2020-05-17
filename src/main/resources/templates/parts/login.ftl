@@ -1,6 +1,14 @@
 <#macro login path isRegistrationForm>
     <form action="${path}" method="post">
-        <div class="form-group row">
+        <#if isRegistrationForm>
+            <div class="form-group row ">
+                <label class="col-sm-2 col-form-label">Email:</label>
+                <div class="col-sm-6">
+                    <input type="email" name="email" class="form-control" placeholder="email@domail.com" />
+                </div>
+            </div>
+        </#if>
+        <div class="form-group row ">
             <label class="col-sm-2 col-form-label">User Name :</label>
             <div class="col-sm-6">
                 <input type="text" name="username" class="form-control" placeholder="User name" />
@@ -13,7 +21,7 @@
             </div>
         </div>
         <input type="hidden" name="_csrf" value="${_csrf.token}" />
-        <#if !isRegistrationForm><a href="/registration">Add new user</a><br></#if>
+        <#if !isRegistrationForm><p class="text-center"> You have't got account? <a   href="/registration"> register now!</a></p><br></#if>
         <button class="btn btn-primary" type="submit"> <#if isRegistrationForm> Create <#else> Sigh In </#if></button>
     </form>
 </#macro>
