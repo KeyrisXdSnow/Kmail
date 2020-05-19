@@ -1,6 +1,5 @@
 package com.example.kmail.controller;
 
-import com.example.kmail.domain.Role;
 import com.example.kmail.domain.User;
 import com.example.kmail.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
