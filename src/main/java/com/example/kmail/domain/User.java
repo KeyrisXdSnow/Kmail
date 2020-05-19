@@ -2,8 +2,10 @@ package com.example.kmail.domain;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.annotation.Resource;
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,16 +17,24 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String username;
     private String password;
-    private String email;
+    private String loginEmail;
     private boolean active;
+    private String activeEmailName = "none" ; // notNULL! bug
+    private String activationCode ;
+
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+    public String getActiveEmailName() {
+        return activeEmailName;
+    }
 
-    private String activationCode ;
+    public void setActiveEmailName(String activeEmailName) {
+        this.activeEmailName = activeEmailName;
+    }
 
     public Long getId() {
         return id;
@@ -95,12 +105,12 @@ public class User implements UserDetails {
         return roles.contains(Role.ADMIN);
     }
 
-    public String getEmail() {
-        return email;
+    public String getLoginEmail() {
+        return loginEmail;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setLoginEmail(String loginEmail) {
+        this.loginEmail = loginEmail;
     }
 
     public String getActivationCode() {
@@ -110,4 +120,6 @@ public class User implements UserDetails {
     public void setActivationCode(String activationCode) {
         this.activationCode = activationCode;
     }
+
+
 }

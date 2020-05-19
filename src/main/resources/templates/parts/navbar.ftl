@@ -24,6 +24,7 @@
                         <a class="nav-link" href="/users/">UserList</a>
                     </li>
                 </#if>
+
                 <li class="nav-item active">
                     <div class="page-wrapper">
                         <a class="btn trigger" href="#" role="button">Send notes</a>
@@ -38,7 +39,10 @@
                 </div>
 
             </ul>
-            <div class="navbar-text mr-3"> <@settingsWindow></@settingsWindow></div>
+            <div class="navbar-text mr-3">
+                <#if activeEmailName??></#if> <@settingsWindow activeEmailName></@settingsWindow>
+                <#else> <@settingsWindow "you do not have a connected email" ></@settingsWindow>
+            </div>
 
 
         </div>

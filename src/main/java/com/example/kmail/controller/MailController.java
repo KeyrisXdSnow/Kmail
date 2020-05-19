@@ -40,9 +40,5 @@ public class MailController {
         return "sendMesForm";
     }
 
-    @PostMapping ("/newEmail")
-    public String helllo (Model model) {
 
-        return  "mainForm";
-    }
 }

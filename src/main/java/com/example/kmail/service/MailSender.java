@@ -57,10 +57,10 @@ public class MailSender {
     }
 
 
-    @Bean
-    public JavaMailSender getMailSender () {
-        return mailSender;
-    }
+//    @Bean
+//    public JavaMailSender getMailSender () {
+//        return mailSender;
+//    }
 
 
 
