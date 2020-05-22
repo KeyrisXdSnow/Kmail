@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/static/css/modalWindow/settings.css">
 </#macro>
 
-<#macro settingsWindow email>
+<#macro settingsWindow email username>
 
     <div class="modal-overlay closed" id="modal-overlay"></div>
 
@@ -16,7 +16,7 @@
             <div class="list-group" style="margin-top: 3%">
                 <a href="#" class="list-group-item flex-column align-items-start" style="border-top: none">
                     <div>
-                        <h5><p class="text-center"> <#if name??>${name}</#if> </p></h5>
+                        <h5><p class="text-center"> ${username}</p></h5>
                         <h7><p class="text-center"> ${email} </p></h7>
                     </div>
                 </a>

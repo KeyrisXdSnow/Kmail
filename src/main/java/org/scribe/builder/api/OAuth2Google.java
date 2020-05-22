@@ -134,6 +134,7 @@ public class OAuth2Google extends DefaultApi20 {
 
             Response response = request.send();
             try {
+
                 return api.getAccessTokenExtractor().extract(response.getBody());
             } catch (Exception e) {
                 e.printStackTrace();

@@ -2,6 +2,8 @@
 <#import "parts/messageList.ftl" as mesList>
 
 <@common.page>
-    ${str}
-    <@mesList.messageListForm></@mesList.messageListForm>
+    <#if messageList??>
+    <@mesList.messageListForm messageList></@mesList.messageListForm>
+        <#else> Либо null либо включи gmail =)
+    </#if>
 </@common.page>

@@ -2,7 +2,6 @@
 
 <@c.page>
     List of users
-
     <table>
         <thead>
         <tr>

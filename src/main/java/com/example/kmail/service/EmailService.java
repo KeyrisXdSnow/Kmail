@@ -1,23 +1,26 @@
 package com.example.kmail.service;
 
 import com.example.kmail.domain.Email;
-import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.example.kmail.repository.EmailRepo;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.scribe.builder.ServiceBuilder;
-import org.scribe.builder.ServiceBuilder;
-import org.json.simple.parser.JSONParser;
 import org.scribe.builder.api.OAuth2Google;
-import org.scribe.model.OAuthRequest;
-import org.scribe.model.Response;
-import org.scribe.model.Token;
-import org.scribe.model.Verb;
-import org.scribe.model.Verifier;
+import org.scribe.model.*;
 import org.scribe.oauth.OAuthService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import static com.example.kmail.config.OAuth2Config.*;
 
+@Service
 public class EmailService {
+
+    @Autowired
+    private EmailRepo emailRepo;
+
+
 
     private final Token EMPTY_TOKEN = null;
     private OAuthService service;
@@ -49,14 +52,22 @@ public class EmailService {
         service.signRequest(accessToken, request);
         Response response = request.send();
 
+        System.out.println(accessToken.getToken());
         System.out.println("Got it! Lets see what we found...");
         System.out.println();
         System.out.println(response.getCode());
         System.out.println(response.getBody());
         JSONObject jsonObject = (JSONObject) new JSONParser().parse(response.getBody());
 
-        Email email = new Email(String.valueOf(jsonObject.get("id")),String.valueOf(jsonObject.get("email")));
+        Email email = new Email(String.valueOf(jsonObject.get("id")),String.valueOf(jsonObject.get("email")),accessToken.getToken());
         return email;
+
+    }
+
+    public String removeUserEmailAccess (Email email) {
+        String url = LOGOUT_URL + email.getAccessToken();
+        emailRepo.delete(email);
+        return  url;
 
     }
 

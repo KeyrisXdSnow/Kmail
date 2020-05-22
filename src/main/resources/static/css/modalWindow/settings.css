@@ -1,4 +1,8 @@
 
+p {
+  color: #2a2c2e;
+}
+
 .setting-modal {
   border-radius: 17px;
   /* This way it could be display flex or grid or whatever also. */
@@ -13,15 +17,17 @@
 
   position: fixed;
 
-  z-index: 100;
-
-  left: 86%;
-  top: 40%;
+    left: 90%;
+  top: 35%;
 
   /* Use this for centering if unknown width/height */
   transform: translate(-50%, -50%);
   background: white;
   box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.14);
+  z-index: 9997;
+}
+.modal{
+  z-index: 9998;
 }
 .closed {
   display: none;

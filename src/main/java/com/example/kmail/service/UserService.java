@@ -6,7 +6,6 @@ import com.example.kmail.domain.Role;
 import com.example.kmail.domain.User;
 import com.example.kmail.repository.EmailRepo;
 import com.example.kmail.repository.UserRep;
-import freemarker.template.utility.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,7 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.UUID;
 
 @Service
 @Component("sendEmail")
@@ -82,16 +82,23 @@ public class UserService implements UserDetailsService {
     }
 
     public void sendMessage(Message message) {
-        mailSender.send(message.getRecipient(),message.getSubject(),message.getMessageText());
+        mailSender.send(message.getTo(),message.getSubject(),message.getBody());
     }
 
     public void addEmail(User user, Email email){
-        Email activeEmails = emailRepo.findByIsActive(false);
+        Email activeEmails = emailRepo.findByIsActive(true);
         if (activeEmails != null) {
             activeEmails.setActive(false);
         }
         email.setActive(true);
         email.setUser(user);
         emailRepo.save(email);
+
+        user.setActiveEmailName(email.getEmailName());
+        userRepo.save(user);
+
     }
+
+
+
 }

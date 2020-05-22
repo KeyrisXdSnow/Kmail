@@ -1,9 +1,22 @@
+.fixed-bottom{
 
-html, body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
+    background-color: white;
+    width: 25%;
+    left: 67%;
+
 }
+
+#container {
+    position: absolute;
+    -webkit-transition: margin-bottom 0.5s ease-in-out;
+    transition: margin-bottom 0.5s ease-in-out;
+    z-index: 9995;
+    display: none;
+}
+#container:target {
+    display: block;;
+}
+
 
 .blur-it {
     -webkit-filter: blur(4px);
@@ -16,73 +29,38 @@ div {
 }
 
 
-.modal-wrapper {
-
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    visibility: hidden;
-    opacity: 0;
-    -webkit-transition: margin-right 0.25s ease-in-out;
-    transition: all 0.25s ease-in-out;
-
-
-}
-
-.modal-wrapper.open {
-    opacity: 1;
-    visibility: visible;
-}
-.fixed-top {
-    margin-top: 1%;
-}
-.modal {
-    width: 32%;
-    height: available;
-    display: block;
-    position: relative;
-    top: 55%;
-    left: 67%;
-    background: #fff;
-    opacity: 0;
-    -webkit-transition: margin-bottom 0.5s ease-in-out;
-    transition: margin-bottom 0.5s ease-in-out;
-}
-
 .content textarea {
     margin-top: 1% ;
     resize: none;
     width: 100%;
 }
 
-
-.modal-wrapper.open .modal {
-    margin-top: -200px;
-    opacity: 1;
-}
-
-
-
 .head {
     width: 100%;
     height: available;
     overflow: hidden;
-    background: #e2525c;
+    background: #2b2b2b;
+    z-index: 9999
 }
 .head text {
     align-items: center;
-    color: rgba(21, 25, 27, 0);
+    color: rgb(233, 240, 239);
     margin-left: 2%;
 }
+.head p {
+    color: rgb(233, 240, 239);
+    align-items: center;
+    justify-content: center;
+}
 
-.btn-close {
+.close {
     font-size: 28px;
-    display: block;
     float: right;
-    color: #ffffff;
+    color: #e9f0ef;
     margin-right: 1%;
+}
+.content{
+    background-color: white;
 }
 
 .content textarea {

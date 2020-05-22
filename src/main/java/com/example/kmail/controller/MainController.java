@@ -37,14 +37,15 @@ public class MainController {
     }
 
     @GetMapping("/mainForm")
-    public String main(@RequestParam(required = false,defaultValue = "") String filter, Model model) {
+    public String main(@RequestParam(required = false,defaultValue = "") String filter,
+                       @AuthenticationPrincipal User user, Model model) {
 
         Iterable<Notes> messages;
 
         if (filter != null && !filter.isEmpty()) {
-            messages = noteRepo.findByTag(filter);
+            messages = noteRepo.findByAuthorAndTag(user,filter);
         } else {
-            messages = noteRepo.findAll();
+            messages = noteRepo.findByAuthor(user);
         }
 
         model.addAttribute("messages", messages);

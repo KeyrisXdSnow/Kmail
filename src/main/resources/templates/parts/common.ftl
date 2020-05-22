@@ -1,8 +1,11 @@
-<#include "../menu/index.ftl">
-<#include "../menu/settings.ftl">
+<#include "../menu/sendMessage.ftl">
+<#import "../menu/settings.ftl" as settings>
+
+<#import "../menu/sendMessage.ftl" as sendMessage>
+
 <#macro page>
-<!DOCTYPE html>
-<html>
+    <!DOCTYPE html>
+    <html>
 
     <head lANG="en">
         <meta charset="UTF-8">
@@ -19,24 +22,54 @@
               integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
               crossorigin="anonymous">
 
-        <!-- Sweet alert -->
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
 
-        <@modalWidowDep></@modalWidowDep>
-        <@menuDep></@menuDep>
 
+        <!-- Sweet alert-->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+        <script src="/static/sweetAlert/dist/sweetalert2.all.min.js"></script>
+        <script src="/static/sweetAlert/dist/sweetalert2.min.js"></script>
+        <link rel="stylesheet" href="/static/sweetAlert/dist/sweetalert2.min.css">
+
+        <@settings.modalWidowDep></@settings.modalWidowDep>
+        <@sendMessage.menuDep></@sendMessage.menuDep>
     </head>
     <body>
+
+    <#if mesSend??>
+        <script src="js/alerts/messageSend.js"></script>
+    </#if>
+    <#if mesNotSend??>
+        <script src="js/alerts/messageNotSend.js"></script>
+    </#if>
+    <#if MesDelete??>
+        <script src="js/alerts/messageDelete.js"></script>
+    </#if>
+    <#if mesNotDelete??>
+        <script src="js/alerts/messageNotDelete.js"></script>
+    </#if>
+
+
+    <div class="allClassesContainer" style="max-width: 100%">
         <#include "navbar.ftl ">
         <div class="container mt-5">
-        <#nested>
+            <#nested>
         </div>
-        <!-- Optional JavaScript -->
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-        <!-- SweetAlert JavaScript -->
+        <@sendMessage.menu></@sendMessage.menu>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+            integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+            crossorigin="anonymous"></script>
+
+    <script>
+    </script>
     </body>
-</html>
+    </html>
+
+
+
 </#macro>

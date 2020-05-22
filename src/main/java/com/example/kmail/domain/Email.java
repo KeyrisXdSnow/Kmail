@@ -1,7 +1,6 @@
 package com.example.kmail.domain;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table (name = "usr_emails")
@@ -14,6 +13,7 @@ public class Email {
     private String emailId ;
     private String emailName ;
     private boolean isActive = false;
+    private String accessToken ;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
@@ -22,9 +22,10 @@ public class Email {
     public Email() {
     }
 
-    public Email(String emailId, String emailName) {
+    public Email(String emailId, String emailName, String accessToken) {
         this.emailId = emailId;
         this.emailName = emailName;
+        this.accessToken = accessToken;
     }
 
 
@@ -66,5 +67,13 @@ public class Email {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 }

@@ -1,36 +1,53 @@
 package com.example.kmail.domain;
 
-import javax.persistence.*;
+import org.springframework.stereotype.Component;
+
 import java.io.File;
 import java.util.ArrayList;
 
 
+@Component
 public class Message {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", updatable = false, nullable = false)
     private Long id ;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private String sender;
-    private String recipient;
+    private String mesId;
+
+    private String from;
+    private String to;
     private String subject;
-    private String messageText ;
+    private String snippet;
+    private String body;
     private ArrayList<File> attachedFiles;
+    private String date;
 
     public Message () {
     }
 
-    public Message(String sender, String recipient, String subject, String messageText, ArrayList<File> attachedFiles) {
-        this.sender = sender;
-        this.recipient = recipient;
+    public Message(Long id, String mesId, String from, String to, String subject, String snippet,String date) {
+        this.id = id ;
+        this.mesId = mesId;
+        this.from = from;
+        this.to = to;
         this.subject = subject;
-        this.messageText = messageText;
+        this.snippet = snippet;
+        this.date = date;
+    }
+
+    public Message (Long id, String to, String subject, String body,ArrayList<File> attachedFiles) {
+        this.id = id ;
+        this.to = to;
+        this.subject = subject;
+        this.body = body;
         this.attachedFiles = attachedFiles;
     }
 
+    public Message(String to, String from, String subject, String body) {
+        this.to = to;
+        this.from = from;
+        this.subject = subject;
+        this.body = body;
+    }
 
     public Long getId() {
         return id;
@@ -40,20 +57,28 @@ public class Message {
         this.id = id;
     }
 
-    public String getSender() {
-        return sender;
+    public String getMesId() {
+        return mesId;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
+    public void setMesId(String mesId) {
+        this.mesId = mesId;
     }
 
-    public String getRecipient() {
-        return recipient;
+    public String getFrom() {
+        return from;
     }
 
-    public void setRecipient(String recipient) {
-        this.recipient = recipient;
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
     }
 
     public String getSubject() {
@@ -64,12 +89,20 @@ public class Message {
         this.subject = subject;
     }
 
-    public String getMessageText() {
-        return messageText;
+    public String getSnippet() {
+        return snippet;
     }
 
-    public void setMessageText(String messageText) {
-        this.messageText = messageText;
+    public void setSnippet(String snippet) {
+        this.snippet = snippet;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
     }
 
     public ArrayList<File> getAttachedFiles() {
@@ -79,4 +112,13 @@ public class Message {
     public void setAttachedFiles(ArrayList<File> attachedFiles) {
         this.attachedFiles = attachedFiles;
     }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 }
+
