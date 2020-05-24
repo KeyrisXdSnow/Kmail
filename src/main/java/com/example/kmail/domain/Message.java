@@ -4,12 +4,12 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Component
 public class Message {
 
-    private Long id ;
 
     private String mesId;
 
@@ -20,22 +20,23 @@ public class Message {
     private String body;
     private ArrayList<File> attachedFiles;
     private String date;
+    private List<String> labels;
 
     public Message () {
     }
 
-    public Message(Long id, String mesId, String from, String to, String subject, String snippet,String date) {
-        this.id = id ;
+    public Message( String mesId, String from, String to, String subject, String snippet,String date,List<String> labels) {
+
         this.mesId = mesId;
         this.from = from;
         this.to = to;
         this.subject = subject;
         this.snippet = snippet;
         this.date = date;
+        this.labels = labels ;
     }
 
-    public Message (Long id, String to, String subject, String body,ArrayList<File> attachedFiles) {
-        this.id = id ;
+    public Message (String to, String subject, String body,ArrayList<File> attachedFiles ) {
         this.to = to;
         this.subject = subject;
         this.body = body;
@@ -47,14 +48,6 @@ public class Message {
         this.from = from;
         this.subject = subject;
         this.body = body;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getMesId() {
@@ -119,6 +112,14 @@ public class Message {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public List<String> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(List<String> labels) {
+        this.labels = labels;
     }
 }
 

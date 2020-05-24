@@ -2,16 +2,14 @@ package com.example.kmail.controller;
 
 import com.example.kmail.domain.Role;
 import com.example.kmail.domain.User;
-import com.example.kmail.repository.UserRep;
+import com.example.kmail.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,8 +18,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/users") // /user будет добавляться в мапингах к указанным путям например будет user/admin
 @PreAuthorize("hasAuthority('ADMIN')")
 public class UserController {
+
     @Autowired
-    UserRep userRepo;
+    UserRepo userRepo;
 
     @GetMapping("")
     public String userList (Model model) {

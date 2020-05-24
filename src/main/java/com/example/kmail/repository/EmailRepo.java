@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface EmailRepo extends CrudRepository<Email,Long> {
     List<Email> findByEmailName(String emailName);
-    Email findByIsActive (boolean isActive);
+    Email findByEmailNameAndUserId (String emailName, Long userId);
+    Email findByEmailIdAndUserId (String emailId, Long userId);
+    Email findByIsActiveAndUserId (boolean isActive, Long id);
 
 }

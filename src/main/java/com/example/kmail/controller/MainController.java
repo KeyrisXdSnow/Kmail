@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
@@ -22,6 +23,7 @@ public class MainController {
 
     @Autowired
     private NoteRep noteRepo;
+
     @Value("${upload.path}")
     private String uploadPath;
 
@@ -60,6 +62,7 @@ public class MainController {
             @RequestParam String text, @RequestParam String tag,
             @RequestParam MultipartFile file,
             Model model) throws IOException {
+
         Notes notes = new Notes(text, tag,user);
         if (file != null) {
             File fileDir = new File(uploadPath);
@@ -82,9 +85,10 @@ public class MainController {
         return "mainForm";
     }
 
-    @GetMapping("/index")
-    public String compose (Model model) {
-        return "index";
+    @GetMapping("/deleteNote")
+    public String deleteNote (Model model, @NotNull Long notesId) {
+        noteRepo.deleteById(notesId);
+        return "mainForm";
     }
 
 

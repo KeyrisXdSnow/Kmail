@@ -4,7 +4,6 @@ import javax.persistence.*;
 
 @Entity
 public class Notes {
-    /** spring будет сам генерировать значение поля id **/
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

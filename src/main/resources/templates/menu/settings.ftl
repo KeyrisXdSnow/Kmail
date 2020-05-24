@@ -13,16 +13,19 @@
     <div class="modal-overlay closed" id="modal-overlay"></div>
 
     <div class="setting-modal closed" id="setting-modal">
-            <div class="list-group" style="margin-top: 3%">
-                <a href="#" class="list-group-item flex-column align-items-start" style="border-top: none">
-                    <div>
-                        <h5><p class="text-center"> ${username}</p></h5>
-                        <h7><p class="text-center"> ${email} </p></h7>
-                    </div>
-                </a>
+        <div class="list-group" style="margin-top: 3%">
+            <a class="list-group-item flex-column align-items-start" style="border-top: none">
+                <div>
+                    <h5>
+                        <p class="text-center"> ${username}</p></h5>
+                    <h7><p class="text-center"> ${email} </p></h7>
+                </div>
+            </a>
+
+            <#if email == "none">
                 <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
                     <form action="/newEmail" method="post">
-                        <input type="hidden" name="_csrf" value="${_csrf.token}" />
+                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
 
                         <div class="text-center">
                             <button type="submit" class="btn btn-link" type="submit">
@@ -32,12 +35,27 @@
 
                     </form>
                 </a>
-                <a href="#" class="list-group-item flex-column align-items-start">
-                    <div class="text-center">
-                        <@logout></@logout>
-                    </div>
+            <#else>
+                <a href="/logOutMail" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <form action="/logOutMail" method="get">
+                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-link" type="submit">
+                                <p class="text-center"> Log out email </p>
+                            </button>
+                        </div>
+
+                    </form>
                 </a>
-            </div>
+            </#if>
+
+            <a href="#" class="list-group-item flex-column align-items-start">
+                <div class="text-center">
+                    <@logout></@logout>
+                </div>
+            </a>
+        </div>
         <footer class="page-footer font-small blue">
             <!-- Copyright -->
             <div class="footer-copyright text-center py-3 ">

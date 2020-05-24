@@ -35,7 +35,7 @@
                 <a class="nav-link" href="/mainForm">Notes</a>
             </li>
             <li class="nav-item">
-                <button id="open-button" type="button" class="btn btn-link" style="color: #868383"> Settings</button>
+                <button id="open-button" type="button" class="btn btn-link" style="color: #868383;text-decoration: #e1eaed"> Settings</button>
                 <@settings.settingsWindow activeEmailName name></@settings.settingsWindow>
             </li>
             <#if isAdmin>
@@ -45,7 +45,7 @@
             </#if>
             <li class="nav-item">
                 <div class="page-wrapper">
-                    <a class="btn trigger" href="#container" role="button">Send notes</a>
+                    <a class="btn trigger" href="#container" role="button" style="color: #858282">Send notes</a>
                 </div>
             </li>
         </ul>

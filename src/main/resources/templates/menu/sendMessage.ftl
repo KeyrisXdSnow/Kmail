@@ -14,7 +14,7 @@
 
 <body>
 <#macro menu>
-    <div class="fixed-bottom" id="container" style="background-color: white">
+    <div class="content" id="container" style="background-color: white; position: fixed; left: 68%; bottom: 1%;  ">
         <form method="post" action="/sendMessage">
             <input type="hidden" name="_csrf" value="${_csrf.token}" />
             <div class="content" >

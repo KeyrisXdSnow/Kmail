@@ -3,7 +3,6 @@ package com.example.kmail.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
@@ -39,7 +38,7 @@ public class MailConfig {
     private String debug;
 
     @Bean
-    public JavaMailSender getMailSender () {
+    public JavaMailSenderImpl getMailSender () {
 
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 

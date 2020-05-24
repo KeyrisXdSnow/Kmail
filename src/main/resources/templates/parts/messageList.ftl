@@ -8,13 +8,11 @@
                 <@mlist.item message></@mlist.item>
             </#list>
     </div>
-    <form method="post" action="/additionMessages">
-        <div>
+    <form method="post" action="${url}/additionMessages">
+        <div class="text-center">
             <input type="hidden" name="_csrf" value="${_csrf.token}" />
-
-            <button class="btn btn-outline-info" type="submit">
-                <img src="picture/button-down.png">
-                what
+            <button  class="btn btn-outline-light" type="submit" >
+                <img src="/static/picture/button-down.png">
             </button>
         </div>
     </form>

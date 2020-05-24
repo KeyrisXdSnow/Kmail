@@ -24,7 +24,6 @@
 
         <script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
 
-
         <!-- Sweet alert-->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
         <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
@@ -51,9 +50,9 @@
     </#if>
 
 
-    <div class="allClassesContainer" style="max-width: 100%">
+    <div class="allClassesContainer" style="height: 100vh;">
         <#include "navbar.ftl ">
-        <div class="container mt-5">
+        <div class="container mt-5 justify-content-center">
             <#nested>
         </div>
         <@sendMessage.menu></@sendMessage.menu>

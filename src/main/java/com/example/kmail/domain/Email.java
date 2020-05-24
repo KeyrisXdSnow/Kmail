@@ -28,6 +28,12 @@ public class Email {
         this.accessToken = accessToken;
     }
 
+    public Email(String emailId, String emailName,String accessToken, User user) {
+        this.emailId = emailId;
+        this.emailName = emailName;
+        this.accessToken = accessToken;
+        this.user = user;
+    }
 
     public String getEmailId() {
         return emailId;

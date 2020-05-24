@@ -15,6 +15,6 @@ public class OAuth2Config {
 
     public static final String SCOPE = "https://mail.google.com/ https://www.googleapis.com/auth/userinfo.email";
 
-    public static final String LOGOUT_URL = "https://accounts.google.com/o/oauth2/revoke?token=";
+    public static final String LOGOUT_URL = "https://accounts.google.com/o/oauth2/revoke";
 
 }
