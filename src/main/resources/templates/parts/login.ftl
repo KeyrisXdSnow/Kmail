@@ -1,4 +1,5 @@
 <#macro login path isRegistrationForm>
+
     <form action="${path}" method="post">
         <#if isRegistrationForm>
             <div class="form-group row " style="justify-content: center">

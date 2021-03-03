@@ -44,17 +44,21 @@ public class GmailService {
     @Autowired
     OAuth2Config oAuth2Config;
 
-    private static  JsonFactory JSON_FACTORY;
-    private static  NetHttpTransport HTTP_TRANSPORT ;
+    private static JsonFactory JSON_FACTORY;
+    private static NetHttpTransport HTTP_TRANSPORT;
 
-    /** Gmail Authorized Gmail API instance.*/
+    /**
+     * Gmail Authorized Gmail API instance.
+     */
     private Gmail gmail;
 
-    /** Main constructor
-    * @throws GeneralSecurityException - Exception occurs as a result of a work error  GoogleNetHttpTransport class
-    */
+    /**
+     * Main constructor
+     *
+     * @throws GeneralSecurityException - Exception occurs as a result of a work error  GoogleNetHttpTransport class
+     */
     public GmailService() throws GeneralSecurityException, IOException {
-        JSON_FACTORY =  JacksonFactory.getDefaultInstance();
+        JSON_FACTORY = JacksonFactory.getDefaultInstance();
         HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
     }
 
@@ -68,13 +72,14 @@ public class GmailService {
 
     /**
      * Method connects to Gmail Service using GMail Api
+     *
      * @param email - active user mail
      */
-    public void connectToEmail (Email email) {
+    public void connectToEmail(Email email) {
 
         GoogleCredential credential = new GoogleCredential().setAccessToken(email.getAccessToken());
 
-        gmail = new Gmail.Builder(HTTP_TRANSPORT,JSON_FACTORY,credential)
+        gmail = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
                 .setApplicationName("KMail")
                 .build();
     }
@@ -82,17 +87,18 @@ public class GmailService {
 
     /**
      * We receive ArrayList of Gmail Messages through a sheet List if messages id
-     * @param email  - active user mail
-     * @param threadMessages  - List of messages Id
+     *
+     * @param email          - active user mail
+     * @param threadMessages - List of messages Id
      * @return - User message ArrayList
      * @throws IOException - IOException
      */
-    private ArrayList<com.example.kmail.domain.Message> getMessages (Email email, List<Message> threadMessages,
-                                                                     ArrayList<com.example.kmail.domain.Message> oldList) throws IOException {
+    private ArrayList<com.example.kmail.domain.Message> getMessages(Email email, List<Message> threadMessages,
+                                                                    ArrayList<com.example.kmail.domain.Message> oldList) throws IOException {
         ArrayList<com.example.kmail.domain.Message> resultMessage = new ArrayList<>();
 
-        int i = 0 ;
-        for (Message threadMessage : threadMessages){
+        int i = 0;
+        for (Message threadMessage : threadMessages) {
 
             if (i < oldList.size()) {
                 if (threadMessage.getId().equals(oldList.get(i).getMesId())) {
@@ -102,16 +108,22 @@ public class GmailService {
             }
 
             Message mes = gmail.users().messages()
-                    .get(email.getEmailId(),threadMessage.getId())
+                    .get(email.getEmailId(), threadMessage.getId())
                     .setFormat("full")
                     .execute();
 
-            String from ="", to = "", subject = "", date = "";
+            String from = "", to = "", subject = "", date = "";
 
             // extract necessary headers
-            for (MessagePartHeader header: mes.getPayload().getHeaders()) {
-                if (header.getName().equals("From")) {from = header.getValue();continue;}
-                if (header.getName().equals(("To"))) {to = header.getValue();continue;}
+            for (MessagePartHeader header : mes.getPayload().getHeaders()) {
+                if (header.getName().equals("From")) {
+                    from = header.getValue();
+                    continue;
+                }
+                if (header.getName().equals(("To"))) {
+                    to = header.getValue();
+                    continue;
+                }
                 if (header.getName().equals(("Date"))) {
                     Date d = new Date(header.getValue());
                     DateFormat df = new SimpleDateFormat("EEE, dd MMM yyy hh:mm ");
@@ -123,20 +135,20 @@ public class GmailService {
                 }
             }
 
-            List<String> labels = mes.getLabelIds() ;
-            if (!mes.getLabelIds().contains("UNREAD")){
+            List<String> labels = mes.getLabelIds();
+            if (!mes.getLabelIds().contains("UNREAD")) {
                 if (labels == null) labels = new ArrayList<>();
                 labels.add("READ");
             }
 
             resultMessage.add(new com.example.kmail.domain.Message(
-                    threadMessage.getId(),
-                    from,
-                    to,
-                    subject,
-                    mes.getSnippet(),
-                    date,
-                    mes.getLabelIds()
+                            threadMessage.getId(),
+                            from,
+                            to,
+                            subject,
+                            mes.getSnippet(),
+                            date,
+                            mes.getLabelIds()
                     )
             );
             i++;
@@ -147,24 +159,34 @@ public class GmailService {
 
     /**
      * Receives a message in full format by his id
+     *
      * @param email - active user mail
      * @param mesId - id of the message we want to receive
      * @return - received message
      * @throws IOException - IOException
      */
-    public com.example.kmail.domain.Message getFullMessage ( Email email, String mesId) throws IOException, ParseException {
+    public com.example.kmail.domain.Message getFullMessage(Email email, String mesId) throws IOException, ParseException {
 
         Message mes = gmail.users().messages()
-                .get(email.getEmailId(),mesId)
+                .get(email.getEmailId(), mesId)
                 .setFormat("full")
                 .execute();
 
-        String from ="", to = "", subject = "", date = "", body = "";
+        String from = "", to = "", subject = "", date = "", body = "";
 
-        for (MessagePartHeader header: mes.getPayload().getHeaders()) {
-            if (header.getName().equals("From")) {from = header.getValue();continue;}
-            if (header.getName().equals(("To"))) {to = header.getValue();continue;}
-            if (header.getName().equals(("Subject"))) {subject = header.getValue();continue;}
+        for (MessagePartHeader header : mes.getPayload().getHeaders()) {
+            if (header.getName().equals("From")) {
+                from = header.getValue();
+                continue;
+            }
+            if (header.getName().equals(("To"))) {
+                to = header.getValue();
+                continue;
+            }
+            if (header.getName().equals(("Subject"))) {
+                subject = header.getValue();
+                continue;
+            }
             if (header.getName().equals(("Date"))) {
                 Date d = new Date(header.getValue());
                 DateFormat df = new SimpleDateFormat("EEE, dd MMM yyy hh:mm ");
@@ -175,10 +197,22 @@ public class GmailService {
         body = mes.getPayload().getBody().getData();
         if (body == null) {
             body = mes.getPayload().getParts().get(1).getBody().getData();
+
+            if (body == null && !mes.getPayload().getParts().get(1).getFilename().isEmpty()) {
+                body = mes.getPayload().getParts().get(1).getBody().toString().replaceAll("\"","").
+                        replaceFirst("^.*?:","").replaceAll(",.*$","").trim();
+            }
+            if (body == null) {
+                body = mes.getPayload().getParts().get(0).getBody().getData();
+            }
+            if (body == null) {
+                body = "";
+            }
         }
+
         body = StringUtils.newStringUtf8(Base64.decodeBase64(body));
 
-        com.example.kmail.domain.Message message = new com.example.kmail.domain.Message(to, from, subject, body) ;
+        com.example.kmail.domain.Message message = new com.example.kmail.domain.Message(to, from, subject, body);
         message.setDate(date);
 
         if (mes.getLabelIds() == null) message.setLabels(new ArrayList<>());
@@ -205,74 +239,77 @@ public class GmailService {
 
     /**
      * Method receives a list of letters sent to the user
+     *
      * @param email - active user mail
      * @param count - count of letters we want to receive
      * @return - Arraylist of messages sent to the user
      * @throws IOException - IOException
      */
-    public ArrayList<com.example.kmail.domain.Message> getMessagesToUser (Email email,
-                                                                          Long count,
-                                                                          ArrayList<com.example.kmail.domain.Message> oldList) throws IOException {
+    public ArrayList<com.example.kmail.domain.Message> getMessagesToUser(Email email,
+                                                                         Long count,
+                                                                         ArrayList<com.example.kmail.domain.Message> oldList) throws IOException {
 
         if (gmail == null) return null;
 
         List<Message> threadMessages = gmail.users().messages().
                 list(email.getEmailId())
                 .setMaxResults(count)
-                .setQ("To:"+email.getEmailName())
+                .setQ("To:" + email.getEmailName())
                 .execute()
                 .getMessages();
 
-        return getMessages(email,threadMessages, oldList);
+        return getMessages(email, threadMessages, oldList);
     }
 
     /**
      * Method receives a list of letters sent by user
-     * @param mail - active user mail
+     *
+     * @param mail  - active user mail
      * @param count - count of letters we want to receive
      * @return - Arraylist of messages that the user has sent
      * @throws IOException - IOException
      */
-    public ArrayList<com.example.kmail.domain.Message> getMessagesFromUser (Email mail,
-                                                                            Long count,
-                                                                            ArrayList<com.example.kmail.domain.Message> oldList) throws IOException {
+    public ArrayList<com.example.kmail.domain.Message> getMessagesFromUser(Email mail,
+                                                                           Long count,
+                                                                           ArrayList<com.example.kmail.domain.Message> oldList) throws IOException {
         List<Message> threadMessages = gmail.users().messages().
                 list(mail.getEmailId())
                 .setMaxResults(count)
-                .setQ("From:"+mail.getEmailName())
+                .setQ("From:" + mail.getEmailName())
                 .execute()
                 .getMessages();
 
-        return getMessages(mail,threadMessages,oldList);
+        return getMessages(mail, threadMessages, oldList);
     }
 
 
     /**
-     * @param mail - active user mail
+     * @param mail    - active user mail
      * @param message - Message we want to send
      * @throws MessagingException - MessagingException
-     * @throws IOException - IOException
+     * @throws IOException        - IOException
      */
     public void sendMessage(Email mail, com.example.kmail.domain.Message message) throws MessagingException, IOException {
         MimeMessage mimeMessage;
 
         if (message.getAttachedFiles() == null)
-            mimeMessage = createEmail(message.getTo(), message.getFrom(),message.getSubject(),message.getBody());
+            mimeMessage = createEmail(message.getTo(), message.getFrom(), message.getSubject(), message.getBody());
         else mimeMessage = createEmailWithAttachment(message.getTo(), message.getFrom(),
-                message.getSubject(),message.getBody(),message.getAttachedFiles().get(0));
-        sendPreparedMessage(gmail, mail.getEmailId(),mimeMessage);
+                message.getSubject(), message.getBody(), message.getAttachedFiles().get(0));
+        sendPreparedMessage(gmail, mail.getEmailId(), mimeMessage);
     }
 
 
     /**
      * Send an email from the user's mailbox to its recipient.
-     * @param service Authorized Gmail API instance.
-     * @param userId User's email address. The special value "me"
-     * can be used to indicate the authenticated user.
+     *
+     * @param service      Authorized Gmail API instance.
+     * @param userId       User's email address. The special value "me"
+     *                     can be used to indicate the authenticated user.
      * @param emailContent Email to be sent.
      * @return The sent message
      * @throws MessagingException - MessagingException
-     * @throws IOException - IOException
+     * @throws IOException        - IOException
      */
     private static Message sendPreparedMessage(Gmail service, String userId, MimeMessage emailContent) throws MessagingException,
             IOException {
@@ -285,9 +322,9 @@ public class GmailService {
     /**
      * Create a MimeMessage using the parameters provided.
      *
-     * @param to email address of the receiver
-     * @param from email address of the sender, the mailbox account
-     * @param subject subject of the email
+     * @param to       email address of the receiver
+     * @param from     email address of the sender, the mailbox account
+     * @param subject  subject of the email
      * @param bodyText body text of the email
      * @return the MimeMessage to be used to send email
      * @throws MessagingException - MessagingException
@@ -309,9 +346,10 @@ public class GmailService {
 
     /**
      * Create a message from an email.
+     *
      * @param emailContent Email to be set to raw of message
      * @return a message containing a base64url encoded email
-     * @throws IOException - IOException
+     * @throws IOException        - IOException
      * @throws MessagingException - MessagingException
      */
     private static Message createMessageWithEmail(MimeMessage emailContent)
@@ -327,11 +365,12 @@ public class GmailService {
 
     /**
      * Create a MimeMessage using the parameters provided.
-     * @param to Email address of the receiver.
-     * @param from Email address of the sender, the mailbox account.
-     * @param subject Subject of the email.
+     *
+     * @param to       Email address of the receiver.
+     * @param from     Email address of the sender, the mailbox account.
+     * @param subject  Subject of the email.
      * @param bodyText Body text of the email.
-     * @param file Path to the file to be attached.
+     * @param file     Path to the file to be attached.
      * @return MimeMessage to be used to send email.
      * @throws MessagingException - MessagingException
      */
@@ -367,9 +406,10 @@ public class GmailService {
     }
 
     /**
-     * Trash the specified message.
+     * Trash the specified message .
+     *
      * @param userId User's email address. The special value "me"
-     * can be used to indicate the authenticated user.
+     *               can be used to indicate the authenticated user.
      * @throws IOException - IOException
      */
     public void trashMessage(String userId, String emailId) throws IOException {

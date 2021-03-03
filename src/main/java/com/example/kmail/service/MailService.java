@@ -3,7 +3,6 @@ package com.example.kmail.service;
 import com.example.kmail.domain.Email;
 import com.example.kmail.domain.User;
 import com.example.kmail.repository.EmailRepo;
-import com.example.kmail.repository.UserRepo;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -29,8 +28,6 @@ public class MailService {
 
     @Autowired
     private EmailRepo emailRepo;
-    @Autowired
-    private UserRepo userRepo;
 
     private final static Token EMPTY_TOKEN = null;
     private OAuthService service;

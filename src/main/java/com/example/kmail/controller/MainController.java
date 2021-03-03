@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
@@ -58,10 +58,7 @@ public class MainController {
 
     @PostMapping("/add")
     public String add(
-            @AuthenticationPrincipal User user,
-            @RequestParam String text, @RequestParam String tag,
-            @RequestParam MultipartFile file,
-            Model model) throws IOException {
+            @AuthenticationPrincipal User user, @RequestParam String text, @RequestParam String tag, @RequestParam MultipartFile file, Model model) throws IOException {
 
         Notes notes = new Notes(text, tag,user);
         if (file != null) {
@@ -86,7 +83,7 @@ public class MainController {
     }
 
     @GetMapping("/deleteNote")
-    public String deleteNote (Model model, @NotNull Long notesId) {
+    public String deleteNote (Model model, Long notesId) {
         noteRepo.deleteById(notesId);
         return "mainForm";
     }

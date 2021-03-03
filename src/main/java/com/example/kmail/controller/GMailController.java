@@ -4,6 +4,7 @@ import com.example.kmail.domain.Email;
 import com.example.kmail.domain.Message;
 import com.example.kmail.domain.User;
 import com.example.kmail.repository.EmailRepo;
+import com.example.kmail.repository.UserRepo;
 import com.example.kmail.service.GmailService;
 import com.example.kmail.service.MailService;
 import com.google.api.services.gmail.Gmail;
@@ -13,16 +14,20 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClients;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 @Controller
 @SessionAttributes({"messagesListTo","messagesListFrom", "url", "isUserOpenMessage, gmail"})
@@ -31,9 +36,13 @@ public class GMailController {
     @Autowired
     private GmailService gmailService;
     @Autowired
+    private UserRepo userRepo;
+    @Autowired
     private MailService mailService;
     @Autowired
     private EmailRepo emailRepo;
+    @Value("${upload.path}")
+    private String uploadPath;
 
     @ModelAttribute("messagesListTo")
     public ArrayList<Message> createMessagesListTo() {
@@ -56,7 +65,7 @@ public class GMailController {
         return null;
     }
 
-    @PostMapping("greeting")
+    @PostMapping("/greeting")
     public ModelAndView logInUserGmail (@AuthenticationPrincipal User user,
                                 @ModelAttribute("gmail") Gmail gmail,
                                 Model model) {
@@ -75,19 +84,31 @@ public class GMailController {
         return modelAndView;
     }
 
+
+    @PostMapping ("/newEmail")
+    public String googleAccAuthorization (Model model){
+        String url = mailService.getAuthorizationForm();
+        model.addAttribute("url",url);
+        return "rediToGoogleForm";
+
+    }
+
+
+
+
     @GetMapping("/sosi")
     public ModelAndView getGoogleAccInfo1(@RequestParam String code,
                                           @AuthenticationPrincipal User user,
                                           @ModelAttribute("gmail") Gmail gmail) throws ParseException {
-
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("greeting");
-
-        Email email = mailService.initAuthorize(code,user);
-        mailService.addMail(user,email);
-        gmailService.connectToEmail(email);
-
-        modelAndView.addObject("gmail",gmail);
+        try {
+            Email email = mailService.initAuthorize(code, user);
+            mailService.addMail(user, email);
+            gmailService.connectToEmail(email);
+            modelAndView.addObject("gmail", gmail);
+        } catch (Exception e) {
+        }
 
         return modelAndView;
     }
@@ -185,10 +206,18 @@ public class GMailController {
     }
 
     @PostMapping("/sendMessage")
-    public ModelAndView sendMessage(Message message,
+    public ModelAndView sendMessage(@RequestParam MultipartFile attachedFiles, @RequestParam String body, @RequestParam String subject, @RequestParam String to,
                               @AuthenticationPrincipal User user, @ModelAttribute("gmail") Gmail gmail, Model model) {
 
         ModelAndView modelAndView = new ModelAndView();
+        try {
+
+        Message message = new Message(to,subject,body, new ArrayList<>());
+        if (message.getTo() == null ^ message.getTo().trim().length() == 0 ) {
+            model.addAttribute("mesNotSend", true);
+            modelAndView.setViewName("greeting");
+            return modelAndView;
+        }
 
         if (gmailService.getGmail() == null)
             if (gmail == null) {
@@ -205,13 +234,29 @@ public class GMailController {
 
         model.addAttribute("isAlertSend", true);
 
-        try {
+            File f = null ;
+            if (attachedFiles != null) {
+                File fileDir = new File(uploadPath);
+                if (!fileDir.exists()) fileDir.mkdir();
 
+                String fileUUID = UUID.randomUUID().toString() ; // unique id file
+                String resultPath = fileUUID.concat(".").concat(attachedFiles.getOriginalFilename());
+
+                attachedFiles.transferTo(new File(uploadPath.concat("/").concat(resultPath)));
+                f = new File(uploadPath +"/"+ fileUUID.concat(".").concat(attachedFiles.getOriginalFilename()));
+
+                ArrayList<File> z = new ArrayList<>() ; z.add(f);
+                message.setAttachedFiles(z);
+            }
             message.setFrom(email.getEmailName());
             gmailService.sendMessage(email, message);
             model.addAttribute("mesSend", true);
 
+            if (attachedFiles != null) if ( f != null) f.delete() ;
+
+
         } catch (Exception e) {
+
             model.addAttribute("mesNotSend", true);
         }
         model.addAttribute("alertType", true);
@@ -222,6 +267,7 @@ public class GMailController {
     @PostMapping("/trashMessage")
     public ModelAndView trashMessage(@RequestParam String mesId,
                                      @AuthenticationPrincipal User user,
+
                                      HttpServletRequest request,
                                      Model model,
                                      @ModelAttribute("messagesListTo") ArrayList<Message> messagesListTo,
@@ -286,6 +332,8 @@ public class GMailController {
             if (response.getStatusLine().getStatusCode() == 200) {
                 emailRepo.delete(email);
                 user.setActiveEmailName("none");
+                userRepo.save(user);
+
             }
 
         } else {

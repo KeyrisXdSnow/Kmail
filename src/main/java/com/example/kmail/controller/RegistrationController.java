@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class RegistrationController {
+
+
+
     @Autowired
     private UserService userService;
 
@@ -24,7 +27,7 @@ public class RegistrationController {
     public String addUser(User user, Model model) {
 
         if (!userService.addUser(user)) {
-            model.addAttribute("message", "User exists!");
+            model.addAttribute("userExist", "userExist");
             return "registration";
         }
 
